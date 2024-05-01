@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <title>Student Mark List</title>
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        th, td {
+            border: 1px solid #dddddd;
+            text-align: left;
+            padding: 8px;
+        }
+
+        th {
+            background-color: #f2f2f2;
+            cursor: pointer;
+        }
+
+        .filter-form {
+            margin-bottom: 20px;
+        }
+
+    </style>
+</head>
+
+<body>
+    <div class="filter-form">
+        <form method="GET" action="{% url 'student_mark' %}">
+            <label for="name_filter">Name:</label>
+            <input type="text" id="name_filter" name="name_filter" value="{{ name_filter }}">
+            <button type="submit"><i class="fa fa-search"></i></button>&nbsp;&nbsp;
+        
+
+            <label for="subject_filter">Subject:</label>
+            <input type="text" id="subject_filter" name="subject_filter" value="{{ subject_filter }}">
+            <button type="submit"><i class="fa fa-search"></i></button>&nbsp;&nbsp;
+
+
+            <label for="pass_fail_filter">Pass/Fail:</label>
+            <input type="text" id="pass_fail_filter" name="pass_fail_filter" value="{{ pass_fail_filter }}">
+            <button type="submit"><i class="fa fa-search"></i></button>&nbsp;&nbsp;
+
+
+            <a href="{% url 'student_mark' %}"><button type="button">All</button></a>
+        </form>
+
+
+
+    </div>
+
+    <h2>Filtered Students</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Student Name</th>
+                <th>Date of Birth</th>
+                <th>Subject</th>
+                <th>Mark</th>
+                <th>Out of</th>
+                <th>Pass/Fail</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for student in pass_fail_filtered_students %}
+            <tr>
+                <td>{{ student.student_name }}</td>
+                <td>{{ student.dob }}</td>
+                <td>{{ student.subject }}</td>
+                <td>{{ student.mark }}</td>
+                <td>{{ student.out_of }}</td>
+                <td>{% if student.mark >= 40 %} Pass {% else %} Fail {% endif %}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <h2>Student Marks Summary</h2>
+    <table id="studentTable">
+        <thead>
+            <tr>
+                <th>Student Name</th>
+                <th>Date of Birth</th>
+                <th>Subject</th>
+                <th>Mark</th>
+                <th>Out of</th>
+                <th>pass/fail</th>
+                <th>Edit</th>
+                <th>Delete</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for student in all_students %}
+            <tr>
+                <td>{{ student.student_name }}</td>
+                <td>{{ student.dob }}</td>
+                <td>{{ student.subject }}</td>
+                <td>{{ student.mark }}</td>
+                <td>{{ student.out_of }}</td>
+                <td>{% if student.mark >= 40 %} Pass {% else %} Fail {% endif %}</td>
+                <td><a href="{% url 'edit_student' student.pk %}">Edit</a> |</td>
+                <td><a href="{% url 'delete_student' student.pk %}">Delete</a></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <h2>Summary</h2>
+    <table id="summaryTable">
+        <thead>
+            <tr>
+                <th>Student Name</th>
+                <th>Total Mark</th>
+                <th>Total Out of</th>
+                <th>Total Percentage</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for summary in summary_body %}
+            <tr>
+                <td>{{ summary.student_name }}</td>
+                <td>{{ summary.total_mark }}</td>
+                <td>{{ summary.total_out_of }}</td>
+                <td>{{ summary.total_percentage }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <br>
+    <a href="{% url 'student_information' %}">Add New Student Mark</a> &nbsp;
+    
+</body>
+
+</html>
